@@ -11,12 +11,6 @@ struct Point {
 
 fn main() {
 	let y: Option<Point> = Some(Point { x: 100, y: 200 });
-
-	match y {
-		Some(p) => {
-			let y = p;
-		}
-		_ => panic!("no match!"),
-	}
+	let y = y.unwrap();
 	y; // Fix without deleting this line.
 }
