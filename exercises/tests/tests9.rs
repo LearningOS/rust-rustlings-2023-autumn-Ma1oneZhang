@@ -27,35 +27,37 @@
 //
 // You should NOT modify any existing code except for adding two lines of attributes.
 
-// I AM NOT DONE
+extern "C" {
+	#[link_name = "my_demo_function"]
+	fn my_demo_function(a: u32) -> u32;
 
-extern "Rust" {
-    fn my_demo_function(a: u32) -> u32;
-    fn my_demo_function_alias(a: u32) -> u32;
+	#[link_name = "my_demo_function"]
+	fn my_demo_function_alias(a: u32) -> u32;
 }
 
 mod Foo {
-    // No `extern` equals `extern "Rust"`.
-    fn my_demo_function(a: u32) -> u32 {
-        a
-    }
+	// No `extern` equals `extern "Rust"`.
+	#[no_mangle]
+	extern "C" fn my_demo_function(a: u32) -> u32 {
+		a
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+	use super::*;
 
-    #[test]
-    fn test_success() {
-        // The externally imported functions are UNSAFE by default
-        // because of untrusted source of other languages. You may
-        // wrap them in safe Rust APIs to ease the burden of callers.
-        //
-        // SAFETY: We know those functions are aliases of a safe
-        // Rust function.
-        unsafe {
-            my_demo_function(123);
-            my_demo_function_alias(456);
-        }
-    }
+	#[test]
+	fn test_success() {
+		// The externally imported functions are UNSAFE by default
+		// because of untrusted source of other languages. You may
+		// wrap them in safe Rust APIs to ease the burden of callers.
+		//
+		// SAFETY: We know those functions are aliases of a safe
+		// Rust function.
+		unsafe {
+			my_demo_function(123);
+			my_demo_function_alias(456);
+		}
+	}
 }
